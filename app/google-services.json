@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "458541623698",
+    "project_id": "fireauth-b402e",
+    "storage_bucket": "fireauth-b402e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458541623698:android:21b049beaeedfda529394b",
+        "android_client_info": {
+          "package_name": "com.daniel.fireauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458541623698-2m1ncfd3nha37v185tsgaao32dl6ukc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcJDUwydYYAQKiZ3rA7aPgem_Ltx1Pph4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458541623698-2m1ncfd3nha37v185tsgaao32dl6ukc0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
