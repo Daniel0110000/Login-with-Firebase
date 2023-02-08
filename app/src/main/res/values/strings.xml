@@ -11,8 +11,8 @@
     <string name="back_layout">Back layout</string>
     <string name="create_account">Create Account</string>
 
-    <string name="facebook_app_id">1410577806347214</string>
-    <string name="fb_login_protocol_scheme">fb1410577806347214</string>
+    <string name="facebook_app_id">717898439835144</string>
+    <string name="fb_login_protocol_scheme">fb717898439835144</string>
     <string name="facebook_client_token">56789</string>
 
 </resources>

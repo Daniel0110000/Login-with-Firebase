@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.daniel.fireauth.R
 import com.daniel.fireauth.databinding.ActivitySignInBinding
 
 class SignIn : AppCompatActivity() {
