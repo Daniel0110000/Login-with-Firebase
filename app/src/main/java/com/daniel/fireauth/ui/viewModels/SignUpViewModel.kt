@@ -56,11 +56,13 @@ class SignUpViewModel
                         addOnFailureListener { e ->
                             message.value = e.message.toString()
                             isLoading.value = false
+                            cleanFields()
                         }
                     }
                 }else{
                     isLoading.value = false
                     message.value = "An error has occurred. Please try again"
+                    cleanFields()
                 }
             }
         }else{ // ... else display a message and clear the fields

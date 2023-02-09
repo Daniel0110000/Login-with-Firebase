@@ -18,4 +18,11 @@ constructor(private val authRepository: FireAuthRepository){
         }
     }
 
+    suspend fun singIn(email: String, password: String): Task<AuthResult>?{
+        return when(val auth = authRepository.signInEmailAndPassword(email, password)){
+            is Resource.Success -> auth.data
+            is Resource.Error -> null
+        }
+    }
+
 }
