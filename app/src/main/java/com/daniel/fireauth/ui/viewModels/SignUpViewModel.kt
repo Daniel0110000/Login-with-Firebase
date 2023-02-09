@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniel.fireauth.domain.repository.FireAuthRepository
 import com.daniel.fireauth.domain.useCases.EmailAndPasswordUseCase
 import com.daniel.fireauth.domain.useCases.FacebookUseCase
 import com.daniel.fireauth.domain.useCases.GoogleUseCase
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class SignUpViewModel
     @Inject
     constructor(
+        private val authRepository: FireAuthRepository,
         private val emailAndPasswordUseCase: EmailAndPasswordUseCase,
         private val googleUseCase: GoogleUseCase,
         private val facebookUseCase: FacebookUseCase,
@@ -49,7 +51,9 @@ class SignUpViewModel
                 val result = emailAndPasswordUseCase.signUp(email.value.toString(), password.value.toString())
                 if(result != null){
                     result.apply {
-                        addOnSuccessListener {
+                        addOnSuccessListener { result ->
+                            insertUserData(result.user?.photoUrl.toString(),
+                                result.user?.displayName.toString(), result.user?.email.toString())
                             completed.value = true
                             cleanFields()
                         }
@@ -84,7 +88,11 @@ class SignUpViewModel
                     val google = googleUseCase.insertCredentials(credential)
                     if(google != null){
                         google.apply {
-                            addOnSuccessListener { completed.value = true }
+                            addOnSuccessListener { result ->
+                                insertUserData(result.user?.photoUrl.toString(),
+                                    result.user?.displayName.toString(), result.user?.email.toString())
+                                completed.value = true
+                            }
                             addOnFailureListener { e -> message.value = e.message.toString() }
                         }
                     }else message.value = "An error has occurred. Please try again"
@@ -99,10 +107,21 @@ class SignUpViewModel
             val result = facebookUseCase.invoke(activity, callbackManager)
             if(result != null){
                 result.apply {
-                    addOnSuccessListener { completed.value = true }
+                    addOnSuccessListener { result ->
+                        insertUserData(result.user?.photoUrl.toString(),
+                            result.user?.displayName.toString(), result.user?.email.toString())
+                        completed.value = true
+                    }
                     addOnFailureListener { e -> message.value = e.message.toString() }
                 }
             }else message.value = "An error has occurred. Please try again"
+        }
+    }
+
+    // Insert user data in [SharedPreferences]
+    private fun insertUserData(profileImage: String, username: String, email: String){
+        viewModelScope.launch {
+            authRepository.insertUserData(context, profileImage, username, email)
         }
     }
 

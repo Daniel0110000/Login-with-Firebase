@@ -6,9 +6,11 @@ import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniel.fireauth.domain.repository.FireAuthRepository
 import com.daniel.fireauth.domain.useCases.EmailAndPasswordUseCase
 import com.daniel.fireauth.domain.useCases.FacebookUseCase
 import com.daniel.fireauth.domain.useCases.GoogleUseCase
+import com.daniel.fireauth.domain.utilities.Resource
 import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class SignInViewModel
     @Inject
     constructor(
+        private val authRepository: FireAuthRepository,
         private val emailAndPasswordUseCase: EmailAndPasswordUseCase,
         private val googleUseCase: GoogleUseCase,
         private val facebookUseCase: FacebookUseCase,
@@ -34,10 +37,21 @@ class SignInViewModel
     val message = MutableLiveData<String>()
     val completed = MutableLiveData<Boolean>()
     val signInIntent = MutableLiveData<Intent>()
+    val isRegistered = MutableLiveData<Boolean>()
 
     init {
         email.value = ""
         password.value = ""
+        checkIfTheUserIsRegistered()
+    }
+
+    private fun checkIfTheUserIsRegistered(){
+        viewModelScope.launch {
+            when (val read = authRepository.readUserData(context)){
+                is Resource.Success -> isRegistered.value = read.data?.get(0)?.isNotEmpty()
+                is Resource.Error ->  isRegistered.value = false
+            }
+        }
     }
 
     // Login with email and password
@@ -48,7 +62,9 @@ class SignInViewModel
                 val result = emailAndPasswordUseCase.singIn(email.value.toString(), password.value.toString())
                 if(result != null){
                     result.apply {
-                        addOnSuccessListener {
+                        addOnSuccessListener { result ->
+                            insertUserData(result.user?.photoUrl.toString(),
+                                result.user?.displayName.toString(), result.user?.email.toString())
                             completed.value = true
                             cleanFields()
                         }
@@ -83,7 +99,11 @@ class SignInViewModel
                     val google = googleUseCase.insertCredentials(credential)
                     if(google != null){
                         google.apply {
-                            addOnSuccessListener { completed.value = true }
+                            addOnSuccessListener { result ->
+                                insertUserData(result.user?.photoUrl.toString(),
+                                    result.user?.displayName.toString(), result.user?.email.toString())
+                                completed.value = true
+                            }
                             addOnFailureListener { e -> message.value = e.message.toString() }
                         }
                     }else message.value = "An error has occurred. Please try again"
@@ -98,10 +118,21 @@ class SignInViewModel
             val result = facebookUseCase.invoke(activity, callbackManager)
             if(result != null){
                 result.apply {
-                    addOnSuccessListener { completed.value = true }
+                    addOnSuccessListener { result ->
+                        insertUserData(result.user?.photoUrl.toString(),
+                            result.user?.displayName.toString(), result.user?.email.toString())
+                        completed.value = true
+                    }
                     addOnFailureListener { e -> message.value = e.message.toString() }
                 }
             }else message.value = "An error has occurred. Please try again"
+        }
+    }
+
+    // Insert user data in [SharedPreferences]
+    private fun insertUserData(profileImage: String, username: String, email: String){
+        viewModelScope.launch {
+            authRepository.insertUserData(context, profileImage, username, email)
         }
     }
 

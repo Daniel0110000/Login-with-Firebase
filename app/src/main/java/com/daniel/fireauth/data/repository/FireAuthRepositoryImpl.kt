@@ -1,5 +1,7 @@
 package com.daniel.fireauth.data.repository
 
+import android.content.Context
+import com.daniel.fireauth.data.local.SharedPreferences
 import com.daniel.fireauth.data.remote.signInWithCredentialGoogleOrFacebook
 import com.daniel.fireauth.data.remote.signUpEmailAndPassword
 import com.daniel.fireauth.domain.repository.FireAuthRepository
@@ -14,7 +16,8 @@ import javax.inject.Inject
 class FireAuthRepositoryImpl
 @Inject
 constructor(
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val sh: SharedPreferences
 ) : FireAuthRepository {
 
     override suspend fun signUpEmailAndPassword(email: String, password: String): Resource<Task<AuthResult>> = CallHandler.callHandler {
@@ -27,6 +30,16 @@ constructor(
 
     override suspend fun signInWithCredentialGoogleOrFacebook(credential: AuthCredential): Resource<Task<AuthResult>> = CallHandler.callHandler {
         auth.signInWithCredentialGoogleOrFacebook(credential)
+    }
+
+    override suspend fun insertUserData(context: Context, profileImage: String, username: String, email: String) {
+        CallHandler.callHandler { sh.insertUserData(context, profileImage, username, email) }
+    }
+
+    override suspend fun readUserData(context: Context): Resource<ArrayList<String>> = CallHandler.callHandler { sh.readUserData(context) }
+
+    override suspend fun deleteUserData(context: Context) {
+        CallHandler.callHandler { sh.deleteUserData(context) }
     }
 
 

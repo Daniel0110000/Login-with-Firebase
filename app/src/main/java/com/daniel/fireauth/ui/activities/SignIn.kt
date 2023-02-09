@@ -29,12 +29,18 @@ class SignIn : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel.isRegistered.observe(this){ isRegistered ->
+            if(isRegistered){
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }
+
         callbackManager = CallbackManager.Factory.create()
         initUI()
-
     }
 
-    // Initializacion for the operation of the UI components
+    // Initialization for the operation of the UI components
     private fun initUI(){
         binding.singIn = viewModel
         binding.signUpButton.setOnClickListener {
@@ -70,8 +76,8 @@ class SignIn : AppCompatActivity() {
         viewModel.completed.observe(this){ completed ->
             if(completed){
                 cleanFields()
-                Toast.makeText(this, "Sign In Successfully!", Toast.LENGTH_SHORT).show()
-                // Start activity => MainActivity
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
         }
     }

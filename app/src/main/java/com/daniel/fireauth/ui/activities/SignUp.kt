@@ -73,8 +73,8 @@ class SignUp : AppCompatActivity() {
         viewModel.completed.observe(this){ completed ->
             if(completed){
                 cleanFields()
-                Toast.makeText(this, "Sign Up Successfully!", Toast.LENGTH_SHORT).show()
-                // Start activity => MainActivity
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
         }
 

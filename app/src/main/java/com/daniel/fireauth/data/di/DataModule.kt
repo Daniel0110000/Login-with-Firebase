@@ -1,5 +1,6 @@
 package com.daniel.fireauth.data.di
 
+import com.daniel.fireauth.data.local.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -14,5 +15,9 @@ object DataModule {
     @Provides
     @Singleton
     fun providerFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun providerSharedPreferences(): SharedPreferences = SharedPreferences()
 
 }
