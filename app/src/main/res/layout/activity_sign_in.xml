@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="singIn"
-            type="com.daniel.fireauth.ui.viewModels.SignInViewModel" />
+            type="com.daniel.fireauth.ui.viewModels.AuthViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,8 +103,8 @@
                         android:hint="@string/password"
                         android:inputType="textPassword"
                         android:padding="10dp"
-                        android:textColor="@color/tuna"
                         android:text="@={singIn.password}"
+                        android:textColor="@color/tuna"
                         android:textColorHint="@color/tuna" />
 
                     <LinearLayout
@@ -126,9 +127,9 @@
                             android:id="@+id/signInProgressBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
-                            android:visibility="gone"
-                            android:layout_marginStart="10dp"/>
+                            android:visibility="gone" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/signInButton"
@@ -137,9 +138,9 @@
                             android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:backgroundTint="@color/sunglow"
+                            android:onClick="@{()->singIn.signIn()}"
                             android:text="@string/sign_in"
-                            app:cornerRadius="10dp"
-                            android:onClick="@{()->singIn.signIn()}"/>
+                            app:cornerRadius="10dp" />
 
                     </LinearLayout>
 
@@ -185,8 +186,8 @@
                             android:backgroundTint="@color/white"
                             android:clickable="true"
                             android:focusable="true"
-                            android:onClick="@{()->singIn.google()}"
                             android:foreground="?attr/selectableItemBackground"
+                            android:onClick="@{()->singIn.google()}"
                             app:cardCornerRadius="15dp">
 
                             <ImageView

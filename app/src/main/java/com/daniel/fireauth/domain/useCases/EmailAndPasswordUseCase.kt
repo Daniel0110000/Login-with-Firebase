@@ -8,18 +8,19 @@ import javax.inject.Inject
 
 class EmailAndPasswordUseCase
 @Inject
-constructor(private val authRepository: FireAuthRepository){
+constructor(private val authRepository: FireAuthRepository) {
 
     // Authentication with email and password
     suspend fun signUp(email: String, password: String): Task<AuthResult>? {
-        return when(val auth = authRepository.signUpEmailAndPassword(email, password)){
+        return when (val auth = authRepository.signUpEmailAndPassword(email, password)) {
             is Resource.Success -> auth.data
             is Resource.Error -> null
         }
     }
 
-    suspend fun singIn(email: String, password: String): Task<AuthResult>?{
-        return when(val auth = authRepository.signInEmailAndPassword(email, password)){
+    // Authentication with email and password
+    suspend fun signIn(email: String, password: String): Task<AuthResult>? {
+        return when (val auth = authRepository.signInEmailAndPassword(email, password)) {
             is Resource.Success -> auth.data
             is Resource.Error -> null
         }

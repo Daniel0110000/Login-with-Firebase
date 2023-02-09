@@ -28,20 +28,24 @@ constructor(
         readUserData()
     }
 
-    private fun readUserData(){
+    // Read user data to display activity
+    private fun readUserData() {
         viewModelScope.launch {
-            when(val read = authRepository.readUserData(context)){
+            when (val read = authRepository.readUserData(context)) {
                 is Resource.Success -> {
                     profileImage.value = read.data?.get(0)
                     username.value = read.data?.get(1)
                     email.value = read.data?.get(2)
                 }
-                is Resource.Error -> {message.value = read.message.toString() }
+                is Resource.Error -> {
+                    message.value = read.message.toString()
+                }
             }
         }
     }
 
-    fun deleteUserData(){
+    // Remove user data from [sharedPreferences]
+    fun deleteUserData() {
         viewModelScope.launch { authRepository.deleteUserData(context) }
     }
 

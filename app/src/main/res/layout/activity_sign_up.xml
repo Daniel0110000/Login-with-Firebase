@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="signUp"
-            type="com.daniel.fireauth.ui.viewModels.SignUpViewModel" />
+            type="com.daniel.fireauth.ui.viewModels.AuthViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,9 +96,9 @@
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
                         android:padding="10dp"
+                        android:text="@={signUp.email}"
                         android:textColor="@color/tuna"
-                        android:textColorHint="@color/tuna"
-                        android:text="@={signUp.email}"/>
+                        android:textColorHint="@color/tuna" />
 
                     <EditText
                         android:id="@+id/inputPassword"
@@ -112,26 +113,26 @@
                         android:hint="@string/password"
                         android:inputType="textPassword"
                         android:padding="10dp"
+                        android:text="@={signUp.password}"
                         android:textColor="@color/tuna"
-                        android:textColorHint="@color/tuna"
-                        android:text="@={signUp.password}"/>
+                        android:textColorHint="@color/tuna" />
 
                     <ProgressBar
-                        android:id="@+id/singUpProgressBar"
+                        android:id="@+id/signUpProgressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/singUpButton"
+                        android:id="@+id/signUpButton"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:backgroundTint="@color/tuna"
+                        android:onClick="@{()->signUp.signUp()}"
                         android:text="@string/sign_up"
-                        app:cornerRadius="10dp"
-                        android:onClick="@{()->signUp.signUp()}"/>
+                        app:cornerRadius="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -175,8 +176,8 @@
                             android:backgroundTint="@color/white"
                             android:clickable="true"
                             android:focusable="true"
-                            android:onClick="@{()->signUp.google()}"
                             android:foreground="?attr/selectableItemBackground"
+                            android:onClick="@{()->signUp.google()}"
                             app:cardCornerRadius="15dp">
 
                             <ImageView

@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.daniel.fireauth.databinding.ActivityMainBinding
+import com.daniel.fireauth.ui.commons.Snackbar
 import com.daniel.fireauth.ui.viewModels.MainViewModel
-import com.facebook.login.Login
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initUI(){
+    // Initialization for the operation of the UI components
+    private fun initUI() {
         binding.logOutButton.setOnClickListener {
             auth.signOut()
             viewModel.deleteUserData()
@@ -39,9 +40,20 @@ class MainActivity : AppCompatActivity() {
         observers()
     }
 
-    private fun observers(){
-        viewModel.profileImage.observe(this){ image -> Picasso.get().load(image).into(binding.profileImage)}
-        viewModel.username.observe(this) { username -> binding.welcomeUser.text = "Welcome $username!"}
-        viewModel.email.observe(this){ email -> binding.email.text = email}
+    // ViewModel observers
+    private fun observers() {
+        viewModel.profileImage.observe(this) { image ->
+            Picasso.get().load(image).into(binding.profileImage)
+        }
+        viewModel.username.observe(this) { username ->
+            binding.welcomeUser.text = "Welcome $username!"
+        }
+        viewModel.email.observe(this) { email -> binding.email.text = email }
+        viewModel.message.observe(this) { message ->
+            Snackbar.showMessage(
+                message,
+                binding.mainLayout
+            )
+        }
     }
 }

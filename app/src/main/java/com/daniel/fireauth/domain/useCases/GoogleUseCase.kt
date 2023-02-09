@@ -16,7 +16,7 @@ class GoogleUseCase @Inject constructor(
     private val authRepository: FireAuthRepository
 ) {
     // Provider the google client
-    fun providerGoogleSignInClient(context: Context): Intent{
+    fun providerGoogleSignInClient(context: Context): Intent {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
@@ -27,7 +27,7 @@ class GoogleUseCase @Inject constructor(
 
     // Insert credentials obtained from [Google] api
     suspend fun insertCredentials(account: AuthCredential): Task<AuthResult>? {
-        return when(val auth = authRepository.signInWithCredentialGoogleOrFacebook(account)){
+        return when (val auth = authRepository.signInWithCredentialGoogleOrFacebook(account)) {
             is Resource.Success -> auth.data
             is Resource.Error -> null
         }
